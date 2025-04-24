@@ -3,7 +3,6 @@ package com.example.address_book.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +31,7 @@ public class AddressController {
 
     @GetMapping
     public ResponseEntity<List<Address>> list() {
-        List<Address> addresses = service.getAllAddresses();
-        return new ResponseEntity<>(addresses,HttpStatus.OK); 
+        return service.getAllAddresses() ; 
     }
 
     @PutMapping("/{id}")
