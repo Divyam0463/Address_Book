@@ -1,8 +1,9 @@
 package com.example.address_book.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,38 +15,57 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.address_book.Model.Address;
-import com.example.address_book.Service.AddressService;
-
 
 @RestController
 @RequestMapping("/addresses")
 public class AddressController {
+    private final List<Address> addresses = new ArrayList<>() ;
 
-    @Autowired
-    private AddressService service;
+   @PostMapping
+  public ResponseEntity<Address> addAddress(@RequestBody Address address){
+    addresses.add(address) ; 
+    return new ResponseEntity<>(address,HttpStatus.OK) ; 
+  }
 
-    @PostMapping
-    public ResponseEntity<Address> create(@RequestBody Address address) {
-        return service.addAddress(address);
+  @GetMapping
+  public ResponseEntity<List<Address>> getAllAddresses() {
+    return new ResponseEntity<>(addresses,HttpStatus.OK); 
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Address> getAddressById(@PathVariable Long id){
+     for (Address address : addresses) {
+      if(address.getId().equals(id)){
+        return new ResponseEntity<>(address , HttpStatus.OK) ; 
+      }
+     }
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND) ; 
+  }
+
+  @PutMapping
+  public ResponseEntity<Address> updateAddress(@PathVariable Long id, @RequestBody Address updated_address){
+    for (Address address : addresses) {
+      if(address.getId().equals(id)){
+        address.setCity(updated_address.getCity());
+        address.setEmail(updated_address.getEmail());
+        address.setFullName(updated_address.getFullName());
+        address.setPhoneNumber(updated_address.getPhoneNumber());
+        address.setId(updated_address.getId());
+  
+        return new ResponseEntity<>(address,HttpStatus.OK) ; 
+      }
     }
-
-    @GetMapping
-    public ResponseEntity<List<Address>> list() {
-        return service.getAllAddresses() ; 
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND) ; 
+  }
+  
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Address> deleteAddress(@PathVariable Long id) {   
+    for (Address address : addresses) {
+      if(address.getId().equals(id)){
+        addresses.remove(address); 
+        return new ResponseEntity<>(HttpStatus.OK) ; 
+      }
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Address> update(@PathVariable Long id, @RequestBody Address address) {
-        return service.updateAddress(id, address) ; 
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Address> getById(@PathVariable Long id, @RequestBody Address address){
-        return service.getAddressById(id) ; 
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Address> delete(@PathVariable Long id) {
-        return service.deleteAddress(id) ;  
-    }
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+   }
 }
