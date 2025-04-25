@@ -3,6 +3,7 @@ package com.example.address_book.Controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,7 +23,7 @@ public class AddressController {
     private final List<Address> addresses = new ArrayList<>() ;
 
    @PostMapping
-  public ResponseEntity<Address> addAddress(@RequestBody Address address){
+  public ResponseEntity<Address> addAddress(@RequestBody @Valid Address address){
     addresses.add(address) ; 
     return new ResponseEntity<>(address,HttpStatus.OK) ; 
   }
@@ -43,7 +44,7 @@ public class AddressController {
   }
 
   @PutMapping
-  public ResponseEntity<Address> updateAddress(@PathVariable Long id, @RequestBody Address updated_address){
+  public ResponseEntity<Address> updateAddress(@PathVariable Long id, @RequestBody @Valid Address updated_address){
     for (Address address : addresses) {
       if(address.getId().equals(id)){
         address.setCity(updated_address.getCity());
