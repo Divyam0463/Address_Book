@@ -25,7 +25,6 @@ public class Address {
     private String fullName;
     private String phoneNumber;
     private String email;
-    private String city;
-    
+    private String city ;
 }
 
