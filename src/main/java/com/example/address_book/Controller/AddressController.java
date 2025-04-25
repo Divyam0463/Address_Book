@@ -22,6 +22,7 @@ import com.example.address_book.Service.AddressService;
 @RequestMapping("/addresses")
 public class AddressController {
 
+  //Dependency-Injection
   @Autowired
   private AddressService service;
 
