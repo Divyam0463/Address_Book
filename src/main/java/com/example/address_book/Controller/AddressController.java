@@ -2,6 +2,7 @@ package com.example.address_book.Controller;
 
 import java.util.List;
 
+import com.example.address_book.Exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class AddressController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Address> getById(@PathVariable Long id, @RequestBody Address address){
+  public ResponseEntity<Address> getById(@PathVariable Long id, @RequestBody Address address) throws UserNotFoundException {
     return service.getAddressById(id) ;
   }
 
