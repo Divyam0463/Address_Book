@@ -3,12 +3,12 @@ package com.example.address_book.Service;
 import java.util.*;
 import java.util.Optional;
 
+import com.example.address_book.Exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.example.address_book.Model.Address;
 import com.example.address_book.Repo.AddressRepo;
@@ -41,7 +41,7 @@ public class AddressService {
     }
   }
 
-  public ResponseEntity<Address> getAddressById(Long id) {
+  public ResponseEntity<Address> getAddressById(Long id) throws UserNotFoundException {
     log.info("GET /addresses/{} - Fetching address by ID", id);
     Optional<Address> address = addressRepo.findById(id);
 
@@ -50,7 +50,7 @@ public class AddressService {
       return new ResponseEntity<>(address.get(), HttpStatus.OK);
     } else {
       log.warn("No address found with ID {}", id);
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      throw new UserNotFoundException("User not found with id : "+id) ;
     }
   }
 
